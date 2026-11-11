@@ -1,0 +1,31 @@
+// use prisma-8
+
+model User{
+  id Int @id @default(autoincrement())
+  name String 
+  email String @unique
+  passwordHash String
+  readings Reading[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @onCreate(now()) @onUpdate(now())
+}
+
+enum ReadingSlot{
+  MORNING_FASTING
+  AFTER_BREAKFAST
+  AFTER_LUNCH
+  AFTER_DINNER
+}
+
+model Reading{
+  id Int @id @default(autoincrement())
+  readingDate DateString
+  slot ReadingSlot
+  value Int 
+  userId Int
+  user User @relation(fields:[userId],references:[id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @onCreate(now()) @onUpdate(now())
+
+  @@unique([userId,readingDate,slot])
+}
