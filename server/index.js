@@ -2,6 +2,7 @@ import "dotenv/config"
 import express from 'express'
 import authRoutes from './src/routes/authRoutes.js'
 import readingsRoutes from './src/routes/readingsRoutes.js'
+import reportRoutes from './src/routes/reportRoutes.js'
 import cookieParser from "cookie-parser";
 
 const app = express();
@@ -15,6 +16,7 @@ app.get("/",(req,res)=>{
 
 app.use("/api/auth", authRoutes);
 app.use("/api", readingsRoutes);
+app.use("/api/report",reportRoutes)
 
 
 app.listen(process.env.PORT,()=>{
