@@ -2,8 +2,7 @@ import { db } from "../prisma/db.ts";
 
 const VALID_SLOTS = ["MORNING_FASTING", "AFTER_BREAKFAST", "AFTER_LUNCH", "AFTER_DINNER"];
 
-// Returns { error } if invalid, otherwise { data } ready to pass to create/update.
-// Pass excludeId when editing so the reading being edited isn't counted as a duplicate.
+
 export const validateReading = async ({ userId, value, slot, date, excludeId = null }) => {
     const numericValue = Number(value);
     if (!Number.isInteger(numericValue) || numericValue < 40 || numericValue > 600) {
@@ -14,13 +13,13 @@ export const validateReading = async ({ userId, value, slot, date, excludeId = n
         return { error: `Slot must be one of: ${VALID_SLOTS.join(", ")}` };
     }
 
-    // Format check + reject impossible dates like 2026-13-45
+    
     const parsed = new Date(date);
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || isNaN(parsed) || parsed.toISOString().slice(0, 10) !== date) {
         return { error: "Date must be a valid date in YYYY-MM-DD format" };
     }
 
-    // Note: this is today's date in UTC
+    
     const today = new Date().toISOString().slice(0, 10);
     if (date > today) {
         return { error: "Date can't be in the future" };
